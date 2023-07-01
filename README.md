@@ -86,6 +86,7 @@ graph TD;
     Environment_D-->Life_support_2-->Arduino_1;
     Environment_E-->Life_support_2;
     Environment_F-->Life_support_2;
+    Arduino_1-->PI_1;
   
 ```
 
