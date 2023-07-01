@@ -14,7 +14,10 @@ The Arduino is resposible for life support(s) managment and its attached environ
 
 The rasbery pi is responsible for the collection of data from the backend as well as providing an easy user interface to manage several systems and subsystems. 
 
+
 ## Arduino ( Backend )
+
+> Definition: The arduino hardware controller for life supports and connected environments...
 
 The Arduino backend is witten in C++.  
 Each Arduino can control 3 life supports.                  > ( envrionmental control hardware )
