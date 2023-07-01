@@ -15,10 +15,10 @@ Here is a simple flow chart:
 
 ```mermaid
 graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+    Arduino_1-->PI_1;
+    Arduino_2-->PI_1;
+    Arduino_3-->PI_1;
+    Arduino_4-->PI_1;
 ```
 
 
