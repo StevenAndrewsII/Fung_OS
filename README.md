@@ -40,6 +40,11 @@ Life support subsystem manages:
 
 ## System communication overview:
 
+Basic example:
+
+Arduino   <-- communication via USB -->  RasberyPI : ( user interface layer ) 
+
+flow chart:
 ```mermaid
 graph TD;
     EnvironmentA_1-8-->Arduino_1-->PI_1;
@@ -49,7 +54,7 @@ graph TD;
 ```
 
 
-Arduino   <-- communication via USB -->  RasberyPI : ( user interface layer ) 
+
 
 
 
