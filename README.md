@@ -29,13 +29,13 @@ Each life support can by default, support 4 environments.
 ### life support:
 Life support subsystem manages:
 
-1. Lighting 
-1. Heating 
-1. Humidity/Air exchange
-1. Water tank cleaning 
-1. Waste pumps
-1. door/lighting bypass switch
-1. water level sensor
+> 1. Lighting 
+> 1. Heating 
+> 1. Humidity/Air exchange
+> 1. Water tank cleaning 
+> 1. Waste pumps
+> 1. door/lighting bypass switch
+> 1. water level sensor
     
     
 
