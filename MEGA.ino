@@ -86,7 +86,7 @@ SYS_SETTINGS                    SYS_SETTINGS_;                // hard system set
 /*                                                 Life support class 
 
 DEFINITION:   
-Environments relates to how many fruiting chambers / tents are fed by a life support system. 
+Environments relates to how many fruiting  [chambers / tents / rooms ]  are connected to a life support. 
 
 Examples: system flow chart 
 
