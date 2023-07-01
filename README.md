@@ -5,7 +5,7 @@
 
 About: 
 
-Fung_OS is software to control multiple enclosed mushroom cultivation envrionemnts using Arduino and Rasbery pi hardware 
+Fung_OS is an embeded system to controll & monitor multiple enclosed mushroom cultivation envrionemnts. 
 
 
 
