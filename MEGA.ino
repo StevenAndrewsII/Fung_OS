@@ -6,12 +6,7 @@ Project:              Fung OS / BETA ARCHITECTURE
 
 overview: 
 
-            Fung_OS is software to control multiple envrionemnts via heat an humidity levels as well as manage 
-            several sub systems via arduino as backend / (embeded) system of a larger architecture project.  
-
-            Fung_OS( Arduino ) is a fully customizible backend system for the frontside interface Fung_OS( pi ). 
                 Features: 
-                    
                     core:
                         searil communications protocol formatting 
                       
