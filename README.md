@@ -15,12 +15,12 @@ The project is broken into 2 systems.
 <tbody>
 <td align="center">
 <img width="2000" height="0"><br>
-<sub>
+
     - [x] SHT20 Water proof sensors 
     - [x] TCA9548A I2C multiplexer bridge 
     - [x] Relay control 
     - [X] hardware buttons 
-</sub><br>
+
 <img width="2000" height="0">
 </td>
 </tbody>
