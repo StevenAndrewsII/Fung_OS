@@ -17,6 +17,8 @@ The rasbery pi is responsible for the collection of data from the backend as wel
 ## Arduino 
 
 
+## Rasbery PI
+
 Here is a simple flow chart:
 
 ```mermaid
