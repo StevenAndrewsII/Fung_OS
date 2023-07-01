@@ -11,7 +11,15 @@ Utilizing an ArduinoMEGA as the backend hardware controller and Rasbery PI 3B+ a
 The system is broken into two parts. The Arduino "Backend" and the PI "frontside". 
 
 
+Here is a simple flow chart:
 
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 
 
 Arduino   <-- communication via USB -->  RasberyPI : ( user interface layer ) 
