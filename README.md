@@ -24,11 +24,11 @@ Each life support can by default, support 4 environments.
 ### life support:
 Life support subsystem manages:
 
-        * Lighting 
-        * Heating 
-        * Humidity/Air exchange
-        * Water tank cleaning 
-        * Waste pumps 
+       1. Lighting 
+       1. Heating 
+       1. Humidity/Air exchange
+       1. Water tank cleaning 
+       1. Waste pumps 
     
     
 
