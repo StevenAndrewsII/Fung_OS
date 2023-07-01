@@ -410,52 +410,45 @@ class LIFE_SUPPORT  {
   }// EOF (  Environment_water_tank_cleaning  )
 
 
-
-// utility 
-void valve_select(bool rst_ = false){
-  if (rst_ == true){
-    core_.valve_index = 0;
-    
+  
+  // utility 
+  void valve_select(bool rst_ = false){
+    // operate
+    int index = -1;
     for (int i = 0 ; i < sizeof(enviroments_connected)/sizeof(enviroments_connected[0]); i++){
       for (int check_ = 0 ; check_ < sizeof(ENVIRONMENT_BUFFER)/sizeof(ENVIRONMENT_BUFFER[0]); check_++){
         if (enviroments_connected[i] == ENVIRONMENT_BUFFER[check_].ID ) {
           if (ENVIRONMENT_BUFFER[check_].valve_pin_id > 0 ){
-            Serial.println("toggleing off...... reset");                                                
-            if (ENVIRONMENT_BUFFER[check_].state == true){             // toggle off
-              ENVIRONMENT_BUFFER[check_].toggle               = true;
+            index++;
+            // controller 
+            if (rst_ == true){
+              if (core_.valve_index != 0){
+                 core_.valve_index = 0;
+              }
+              core_.valve_index = 0;
+              Serial.println("toggleing off...... reset");                                                
+              if (ENVIRONMENT_BUFFER[check_].state == true){               // toggle all off
+                ENVIRONMENT_BUFFER[check_].toggle                 = true;
+              }
+            }else{ 
+              if (index == core_.valve_index ){
+                if (ENVIRONMENT_BUFFER[check_].state == false){            // toggle on
+                  ENVIRONMENT_BUFFER[check_].toggle               = true;
+                }
+                core_.valve_index ++;                                      // index buffer forward 
+                return;
+              }else{                                          
+                if (ENVIRONMENT_BUFFER[check_].state == true){             // toggle off
+                  ENVIRONMENT_BUFFER[check_].toggle               = true;
+                }
+              }
             }
           }
         }
       }
     }
-    return;
-  }
-
-  // operate
-  int index = -1;
-  for (int i = 0 ; i < sizeof(enviroments_connected)/sizeof(enviroments_connected[0]); i++){
-    for (int check_ = 0 ; check_ < sizeof(ENVIRONMENT_BUFFER)/sizeof(ENVIRONMENT_BUFFER[0]); check_++){
-      if (enviroments_connected[i] == ENVIRONMENT_BUFFER[check_].ID ) {
-        if (ENVIRONMENT_BUFFER[check_].valve_pin_id > 0 ){
-          index++;
-          // controller 
-          if (index == core_.valve_index ){
-            if (ENVIRONMENT_BUFFER[check_].state == false){            // toggle on
-              ENVIRONMENT_BUFFER[check_].toggle               = true;
-            }
-            core_.valve_index ++;                                      // index buffer forward 
-            return;
-          }else{                                          
-            if (ENVIRONMENT_BUFFER[check_].state == true){             // toggle off
-              ENVIRONMENT_BUFFER[check_].toggle               = true;
-            }
-          }
-          
-        }
-      }
-    }
-  }
-} // EOF ( valve_select )
+  } // EOF ( valve_select )
+  
 
 
 
