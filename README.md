@@ -26,7 +26,7 @@ Each life support can by default, support 4 environments   > ( fruiting chambers
 
 > **Note**
 > 
-> Environments are isolated Fruiting chambers or tents.
+> Environments are isolated Fruiting Chambers / Tents / Rooms.
 
 ### life support:
 Life support subsystem manages:
