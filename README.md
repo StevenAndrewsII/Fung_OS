@@ -12,12 +12,12 @@ The system is broken into two parts. The Arduino "Backend" and the PI "frontside
 
 The Arduino is resposible for life support(s) managment and its attached environments that are controlled by the life support sub system. 
 
-The rasbery pi is responsible for the collection of data from the backend as well as providing an easy user interface to manage several systems and subsystems. 
+The Rasbery PI is responsible for the collection of data from the backend as well as providing an easy user interface to manage several systems and subsystems. 
 
 
 ## Arduino ( Backend )
 
-> Definition: The arduino( backend) is the hardware controller for life support subsystems and their connected environments...
+> Definition: The Arduino( backend) is the hardware controller for life support subsystems and their connected environments...
 
 The Arduino backend is witten in C++.  
 Each Arduino can control 3 life supports.                  > ( envrionmental control hardware )
@@ -46,7 +46,7 @@ Life support subsystem manages:
 The rasbery pi frontside features:
 
 > 1. User interface  
-> 1. Full/Multi system control (multi arduino communication)
+> 1. Full/Multi system control (multi Arduino communication)
 > 1. Wifi - local network cluster communication
 > 1. Data logging
 > 1. Powerd by Pygame as rendering engine  
