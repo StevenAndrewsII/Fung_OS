@@ -10,6 +10,6 @@
 
 <details>
 <summary> Click to expand </summary>
-hidden 1
-hidden2
+1. hidden a
+2. hidden b
 </details>
