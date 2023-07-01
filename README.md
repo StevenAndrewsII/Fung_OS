@@ -5,7 +5,7 @@
 
 # About Fung_OS :  
 
-Fung_OS is an open source embeded system to controll & monitor multiple enclosed mushroom cultivation envrionemnts for large scale production. 
+Fung_OS is an open source embeded system to controll & monitor multiple enclosed mushroom cultivation envrionemnts for large scale lab environments and production. 
 Utilizing an ArduinoMEGA as the backend hardware controller and Rasbery PI 3B+ as the frontside user interface and system manager. 
 
 The system is broken into two parts. The Arduino "Backend" and the PI "frontside". 
