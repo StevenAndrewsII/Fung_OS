@@ -78,7 +78,7 @@ flow chart:
 ```mermaid
 graph TD;
     Environment_A-->Life_support_1-->Arduino_1;
-    Environment_B-->Life_support_2-->Arduino_1;
+    Environment_B-->Life_support_1-->Arduino_1;
   
 ```
 
