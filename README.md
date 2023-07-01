@@ -19,6 +19,8 @@ The rasbery pi is responsible for the collection of data from the backend as wel
 
 ## Rasbery PI
 
+## System communication overview:
+
 Here is a simple flow chart:
 
 ```mermaid
