@@ -18,7 +18,7 @@ The rasbery pi is responsible for the collection of data from the backend as wel
 
 The arduino backend is witten in C++. 
 
-Each arduino can control 3 life supports
+Each arduino can control 3 life supports.
 Each life support can by default, support 4 environments. 
 
 ### life support:
