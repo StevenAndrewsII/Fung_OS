@@ -6,7 +6,7 @@
 About: 
 
 Fung_OS is an embeded system to controll & monitor multiple enclosed mushroom cultivation envrionemnts. 
-Utilizing ATmega2560 as backend hardware and Rasbery PI 3B+ as the frontend user interface.
+Utilizing ArduinoMEGA as the backend hardware controller and Rasbery PI 3B+ as the frontside user interface.
 
 
 
