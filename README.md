@@ -40,7 +40,7 @@ Life support subsystem manages:
   
 ## Rasbery PI
 
-The rasbery pi frontsides features:
+The rasbery pi frontside features:
 
 > 1. User interface  
 > 1. Full/Multi system control (multi arduino communication)
