@@ -7,3 +7,9 @@
 
 > **Warning**
 
+
+<details>
+<summary> Click to expand </summary>
+hidden 1
+hidden2
+</details>
