@@ -10,7 +10,7 @@ Utilizing ATmega2560 as backend hardware and Rasbery PI 3B+ as the frontend user
 
 
 
-Arduino   <-- communication via USB -->  RasberyPI : ( user interfsace layer ) 
+Arduino   <-- communication via USB -->  RasberyPI : ( user interface layer ) 
 
 
 
