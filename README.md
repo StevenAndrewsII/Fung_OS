@@ -15,10 +15,10 @@ Here is a simple flow chart:
 
 ```mermaid
 graph TD;
-    Environment_1-4 -->Arduino_1-->PI_1;
-    Arduino_2-->PI_1;
-    Arduino_3-->PI_1;
-    Arduino_4-->PI_1;
+    Environment(system)_1-8 -->Arduino_1-->PI_1;
+    Environment(system)_1-8 -->Arduino_2-->PI_1;
+    Environment(system)_1-8 -->Arduino_3-->PI_1;
+    Environment(system)_1-8 -->Arduino_4-->PI_1;
 ```
 
 
