@@ -10,11 +10,17 @@ Utilizing an ArduinoMEGA as the backend hardware controller and Rasbery PI 3B+ a
 
 The system is broken into two parts. The Arduino "Backend" and the PI "frontside". 
 
-The Arduino is resposible for life support and the enviroments that are supported by the life support sub system. 
+The Arduino is resposible for life support(s) managment and its attached environments that are supported by the life support sub system. 
 
 The rasbery pi is responsible for the collection of data from the backend as well as providing an easy user interface to manage several systems and subsystems. 
 
-## Arduino 
+## Arduino ( Backend )
+
+The arduino backend is witten in C++. 
+
+Each arduino can control 3 life supports 
+
+### life support: 
 
 
 ## Rasbery PI
