@@ -22,8 +22,8 @@ Each arduino can control 3 life supports.
 
 Each life support can by default, support 4 environments. 
 
-**Note** 
-Environments are isolated Fruiting chambers or tents.
+> **Note** 
+> Environments are isolated Fruiting chambers or tents.
 
 ### life support:
 Life support subsystem manages:
