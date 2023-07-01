@@ -34,8 +34,9 @@ Life support subsystem manages:
 > 1. Humidity/Air exchange
 > 1. Water tank cleaning 
 > 1. Waste pumps
-> 1. door/lighting bypass switch
-> 1. water level sensor
+> 1. Door/lighting bypass switch
+> 1. Water level sensor
+> 1. Valve system control 
     
     
 
