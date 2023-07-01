@@ -507,7 +507,7 @@ class LIFE_SUPPORT  {
         core_.valve_clk                    ++;
        
         // valve operation 
-        int t_ = ((settings_.air_on_time*frame_rate)*60)  / 2 ;
+        int t_ = ((settings_.air_on_time*frame_rate)*60)  / core_.ENVRIONMENTS_INDEX ;
         if (core_.valve_clk >= t_) {
           valve_select();
           core_.valve_clk = 0;
