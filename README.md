@@ -10,6 +10,8 @@
 
 <details>
 <summary> Click to expand </summary>
+  
 1. hidden a
 2. hidden b
+
 </details>
