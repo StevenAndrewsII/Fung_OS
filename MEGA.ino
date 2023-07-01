@@ -425,7 +425,6 @@ class LIFE_SUPPORT  {
               if (core_.valve_index != 0){
                  core_.valve_index = 0;
               }
-              core_.valve_index = 0;
               Serial.println("toggleing off...... reset");                                                
               if (ENVIRONMENT_BUFFER[check_].state == true){               // toggle all off
                 ENVIRONMENT_BUFFER[check_].toggle                 = true;
