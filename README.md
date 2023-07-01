@@ -80,6 +80,9 @@ graph TD;
     Environment_A-->Life_support_1-->Arduino_1;
     Environment_B-->Life_support_1;
     Environment_C-->Life_support_1;
+    Environment_D-->Life_support_2-->Arduino_1;
+    Environment_E-->Life_support_2;
+    Environment_F-->Life_support_2;
   
 ```
 
