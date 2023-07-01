@@ -38,16 +38,6 @@ overview:
                     environment tracking + data logging over time 
                     usb data strorage 
 
-                    
-            Developers thoughts: 
-
-            The aim of the project was to write software that was capable of climate control for more control in lab settings for mycology work. 
-            This architecture will be expanded in the future to be a full featured system for open development. 
-
-            The reason behind this project was to fill a gap in technology in mushroom cultivation at any scale.
-            This project is just a demo of somtehing that on its own may flouish into something new by makeing 
-            it open source for the community to develop futher. 
-
 
 Created By:           Steven Andrews II 
 Creation date:        6/30/23               ( BETA 1.10.0 )
