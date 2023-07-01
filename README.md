@@ -37,10 +37,16 @@ Life support subsystem manages:
 > 1. Water level sensor
 > 1. Valve system control 
     
-    
-
-
+  
 ## Rasbery PI
+
+> 1. User interface  
+> 1. Full/Multi system control (multi arduino communication)
+> 1. Wifi - local network cluster communication
+> 1. Data logging
+> 1. Powerd by Pygame as rendering engine  
+> 1. Multithreaded application 
+
 
 ## System communication overview:
 
