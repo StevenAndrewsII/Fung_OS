@@ -66,7 +66,21 @@ graph TD;
 ```
 
 
+## Life support sub_system overview:
 
+Basic example:
+
+life support (A) ---> FC_1, FC_2, FC_3
+
+life support (B) ---> FC_4, FC_5
+
+flow chart:
+```mermaid
+graph TD;
+    Environment_A-->Life_support_1-->Arduino_1;
+    Environment_B-->Life_support_2-->Arduino_1;
+  
+```
 
 
 
