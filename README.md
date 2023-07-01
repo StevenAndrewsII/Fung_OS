@@ -15,7 +15,7 @@ Here is a simple flow chart:
 
 ```mermaid
 graph TD;
-    Arduino_1-->PI_1;
+    Environment_1-4 -->Arduino_1-->PI_1;
     Arduino_2-->PI_1;
     Arduino_3-->PI_1;
     Arduino_4-->PI_1;
