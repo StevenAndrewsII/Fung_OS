@@ -21,8 +21,6 @@ The rasbery pi is responsible for the collection of data from the backend as wel
 
 ## System communication overview:
 
-Here is a simple flow chart:
-
 ```mermaid
 graph TD;
     EnvironmentA_1-8-->Arduino_1-->PI_1;
