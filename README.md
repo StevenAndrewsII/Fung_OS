@@ -19,7 +19,7 @@ The Rasbery PI is responsible for the collection of data from the backend as wel
   > 1. Hardware & software experimentation
   > 1. Overall for personal learning
   > 1. Free to use for anyone in the mycology feild or as hobby equipment
-  > 1. To fill a need for cheap hardware and simple software in the mycology hobby and feild.
+  > 1. To fill a need for cheap hardware and simple software in the mycology feild / hobby.
   
 
 
