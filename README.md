@@ -15,10 +15,10 @@ The Arduino is resposible for life support(s) managment and its attached environ
 The Rasbery PI is responsible for the collection of data from the backend as well as providing an easy user interface to manage several systems and subsystems. 
 
 ### Reason for creation: 
-  > Proof of concept
-  > Hardware & software experimentation
-  > Overall for personal learning
-  > Free to use for anyone in the mycology feild or as hobby equipment 
+  > 1. Proof of concept
+  > 1. Hardware & software experimentation
+  > 1. Overall for personal learning
+  > 1. Free to use for anyone in the mycology feild or as hobby equipment 
   
 
 
