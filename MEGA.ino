@@ -6,32 +6,37 @@ Project:              Fung OS / BETA ARCHITECTURE
 
 overview: 
 
-                Features: 
-                    core:
-                        searil communications protocol formatting 
-                      
-                    Multi life support: 
-                        Air humidity control 
-                        lighting
-                        heating 
-                        water cleaning 
-                        waste water collection pumps
-                        water level indication 
-                        light / door sensor switch
+     Fung_OS is an open source embeded system to control & monitor multiple enclosed mushroom cultivation envrionments
+     for large scale lab environments and production. Utilizing an ArduinoMEGA as the backend hardware controller and 
+     Rasbery PI 3B+ as the frontside user interface and system manager.
 
-                    Multi environment managment:
-                        SHT20 sensor 
-                        valve system ( closed system control )
+     Features: 
+                    
+          core:
+             searil communications protocol formatting 
+                      
+          Multi life support: 
+            Air humidity control 
+            lighting
+            heating 
+            water cleaning 
+            waste water collection pumps
+            water level indication 
+            light / door sensor switch
+
+          Multi environment managment:
+            SHT20 sensor 
+            valve system ( closed system control )
                         
 
                     
-            Fung_os( pi ) is the userinter interce via USB serial that offers: ( release date: TBA )
-                    Touch screen 
-                    wifi connection ( to other systems on the local network )
-                    UI ( powered by pigame engine )
-                    full system management & control
-                    environment tracking + data logging over time 
-                    usb data strorage 
+          Fung_os( pi ) is the userinter interce via USB serial that offers: ( release date: TBA )
+            Touch screen 
+            wifi connection ( to other systems on the local network )
+            UI ( powered by pigame engine )
+            full system management & control
+            environment tracking + data logging over time 
+            usb data strorage 
 
 
 Created By:           Steven Andrews II 
@@ -53,7 +58,7 @@ unsigned long FPS_lastTime                 =  millis();      // fps limited
 // memory allowocation for system backend arrays 
 #define MAX_ENVIRONMENTS 8                                   // do not change ( limited by chip I2C adresses )
 #define MAX_LIFE_SUPPORT 2                                   // changable ( youll eventually run out of pins - stay under 3 - 4)
-#define MAX_IOPINS 7                                         // changable / (reserved for updates and expansion)
+#define MAX_IOPINS 8                                         // epanable in the future ( last 2 pins are reserved as sensor pins )
 // validation //
 String        version                      =  "1.10.0" ;     // system software version 
 bool          validation_                  =  false;         // validation check guard - on boot 
@@ -86,7 +91,7 @@ SYS_SETTINGS                    SYS_SETTINGS_;                // hard system set
 /*                                                 Life support class 
 
 DEFINITION:   
-Environments relates to how many fruiting  [chambers / tents / rooms ]  are connected to a life support. 
+Environments relates to how many fruiting chambers / tents are fed by a life support system. 
 
 Examples: system flow chart 
 
@@ -180,7 +185,9 @@ pin out order: example :
                                       -1,       // air
                                       -1,       // water cleaning 
                                       -1,       // heating
-                                      -1        // water sensor
+                                      -1,       // water tank ozone pressure release valve.
+                                      -1,       // water sensor
+                                      -1,       // door/light switch 
                     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,8 +302,8 @@ class LIFE_SUPPORT  {
   // system pin controllers - light / air / waste pumps / air + humidity / temperature control...
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void Environment_waterSensor(){              // basic indicator 
-    if ( IO_pinout[ 5 ].pinNumber > -1 ){
-      if ( IO_pinout[ 5 ].value == 1) {
+    if ( IO_pinout[ 6 ].pinNumber > -1 ){
+      if ( IO_pinout[ 6 ].value == 1) {
         core_.water_sensor  = "true"; 
       }else{
         core_.water_sensor  = "false"; 
@@ -396,6 +403,12 @@ class LIFE_SUPPORT  {
         if (IO_pinout[ 2 ].state == false){
           Serial.print("Water tank cleaning has been activated");
           IO_pinout[ 2 ].toggle               = true;
+          
+          // open ozone release valve
+          if ( IO_pinout[ 5 ].pinNumber > -1 && IO_pinout[ 5 ].state == false ){
+             IO_pinout[ 5 ].toggle            = true;
+          }
+
         }
         core_.cleaning_clk                      ++;
         // time out 
@@ -403,6 +416,12 @@ class LIFE_SUPPORT  {
           core_.cleaning_clk                  = 0 ;
           core_.cleaning_toggle               = false ;
           IO_pinout[ 2 ].toggle               = true;
+
+          // close ozone release valve
+          if ( IO_pinout[ 5 ].pinNumber > -1 && IO_pinout[ 5 ].state == true ){
+             IO_pinout[ 5 ].toggle            = true;
+          }
+
           Serial.print("Water tank cleaning has been de_activated");
         }
       }
@@ -410,44 +429,41 @@ class LIFE_SUPPORT  {
   }// EOF (  Environment_water_tank_cleaning  )
 
 
-  
-  // utility 
-  void valve_select(bool rst_ = false){
-    // operate
-    int index = -1;
-    for (int i = 0 ; i < sizeof(enviroments_connected)/sizeof(enviroments_connected[0]); i++){
-      for (int check_ = 0 ; check_ < sizeof(ENVIRONMENT_BUFFER)/sizeof(ENVIRONMENT_BUFFER[0]); check_++){
-        if (enviroments_connected[i] == ENVIRONMENT_BUFFER[check_].ID ) {
-          if (ENVIRONMENT_BUFFER[check_].valve_pin_id > 0 ){
-            index++;
-            // controller 
-            if (rst_ == true){
-              if (core_.valve_index != 0){
-                 core_.valve_index = 0;
+
+// utility for indexing valves durring air system on time 
+void valve_select(bool rst_ = false){
+  int index = -1;
+  for (int i = 0 ; i < sizeof(enviroments_connected)/sizeof(enviroments_connected[0]); i++){
+    for (int check_ = 0 ; check_ < sizeof(ENVIRONMENT_BUFFER)/sizeof(ENVIRONMENT_BUFFER[0]); check_++){
+      if (enviroments_connected[i] == ENVIRONMENT_BUFFER[check_].ID ) {
+        if (ENVIRONMENT_BUFFER[check_].valve_pin_id > 0 ){
+          index++;
+          // controller 
+          if (rst_ == true){
+            if (core_.valve_index != 0){
+              core_.valve_index = 0;
+            }                              
+            if (ENVIRONMENT_BUFFER[check_].state == true){               // reset
+              ENVIRONMENT_BUFFER[check_].toggle                 = true;
+            }
+          }else{ 
+            if (index == core_.valve_index ){
+              if (ENVIRONMENT_BUFFER[check_].state == false){            // toggle on
+                ENVIRONMENT_BUFFER[check_].toggle               = true;
               }
-              Serial.println("toggleing off...... reset");                                                
-              if (ENVIRONMENT_BUFFER[check_].state == true){               // toggle all off
-                ENVIRONMENT_BUFFER[check_].toggle                 = true;
-              }
-            }else{ 
-              if (index == core_.valve_index ){
-                if (ENVIRONMENT_BUFFER[check_].state == false){            // toggle on
-                  ENVIRONMENT_BUFFER[check_].toggle               = true;
-                }
-                core_.valve_index ++;                                      // index buffer forward 
-                return;
-              }else{                                          
-                if (ENVIRONMENT_BUFFER[check_].state == true){             // toggle off
-                  ENVIRONMENT_BUFFER[check_].toggle               = true;
-                }
+              core_.valve_index ++;                                      // index buffer forward 
+              return;
+            }else{                                          
+              if (ENVIRONMENT_BUFFER[check_].state == true){             // toggle off
+                ENVIRONMENT_BUFFER[check_].toggle               = true;
               }
             }
           }
         }
       }
     }
-  } // EOF ( valve_select )
-  
+  }
+} // EOF ( valve_select )
 
 
 
@@ -475,7 +491,7 @@ class LIFE_SUPPORT  {
           core_.humidity_over_regulation_clk ++;
           if (core_.humidity_over_regulation_clk > (settings_.humidity_over_regulation_deley*frame_rate)*60){
            // enable
-            Serial.print("humidity/air system has been activated - humidity low !!! ");
+            Serial.println("humidity/air system has been activated - humidity low !!! ");
             core_.humidity_over_regulation_clk     = 0;
             core_.air_toggle                       = true;
           }
@@ -500,7 +516,7 @@ class LIFE_SUPPORT  {
         // toggle pin on - if off 
         if (IO_pinout[ 1 ].state == false){
           valve_select();
-          Serial.print("Air exhange has been activated");
+          Serial.println("Air exhange has been activated");
           IO_pinout[ 1 ].toggle            = true;
         }
         core_.air_clk                      ++;
@@ -521,7 +537,7 @@ class LIFE_SUPPORT  {
             valve_select(true);            // reset valve system
             IO_pinout[ 1 ].toggle          = true;
           }
-          Serial.print("Air exhange has been de_activated");
+          Serial.println("Air exhange has been de_activated");
         }
       }
     }
@@ -682,7 +698,7 @@ void CREATE_LIFE_SUPPORT( String ID, String connect_IDs[] , int pin_select[]){
   for (int i = 0 ; i < sizeof(connect_IDs); i++){
     if (i < SYS_SETTINGS_.MAX_ENVIRONMENTS_PER_LIFESUPPORT) {
       LIFE_SUPPORT_BUFFER[((sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]))-index)].enviroments_connected[i]    = connect_IDs[i];           // update ids 
-      LIFE_SUPPORT_BUFFER[((sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]))-index)].core_.ENVRIONMENTS_INDEX  = sizeof(connect_IDs);
+      LIFE_SUPPORT_BUFFER[((sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]))-index)].core_.ENVRIONMENTS_INDEX    = sizeof(connect_IDs);
     }
   }
 
@@ -731,8 +747,8 @@ void setup() {
   */
   /////////////////////////////////////////////
 
-  CREATE_ENVIRONMENT( "Avadacadava" , 1 , 26 )  ;                 //   create a fruiting chamber envrionment  - name can be anything ( i2c multi FC )                
-  CREATE_ENVIRONMENT( "jango"       , 2 , 27 )  ;                       //   create a fruiting chamber envrionment  - name can be anything ( i2c multi FC )
+  CREATE_ENVIRONMENT( "FC_A"       , 1 , 26 )  ;                       //   create a fruiting chamber envrionment  - name can be anything ( i2c multi FC )                
+  CREATE_ENVIRONMENT( "FC_B"       , 2 , 27 )  ;                       //   create a fruiting chamber envrionment  - name can be anything ( i2c multi FC )
 
   /////////////////////////////////////////////
   /// create life support air systems ///
@@ -745,21 +761,22 @@ void setup() {
   */
   /////////////////////////////////////////////
   String   attach[2] = { 
-                                "Avadacadava",            // select environments to be attached to a life support.. 
-                                "jango"
+                                "FC_A",            // select environments to be attached to a life support.. 
+                                "FC_B"
   };     
   // SELECT PIN OUT HERE: 
-  int      pin_select[7] = {                              // Note!!!!!! ---->                                         ///   -1 to disable pin   /// 
+  int      pin_select[8] = {                              // Note!!!!!! ---->                                         ///   -1 to disable pin   /// 
       8 ,                                                 // Lighting pin       
       10,                                                 // Air / humidity     ( air exhange )
       11,                                                 // waste pumps        ( FC waste water drain )
       24,                                                 // tank cleaning      ( ozone )
       25,                                                 // heating            ( heating pads or other devices.. )
+      -1,                                                 // ozone tank release valve (valve to release ozone gas from tank durring cleaning )
       12,                                                 // water level sensor 
       -1                                                  // door sensor ( dicscontinued )
   };
 
-  CREATE_LIFE_SUPPORT("UNIT_A",attach,pin_select);       // creates life upport system 
+  CREATE_LIFE_SUPPORT( "UNIT_A", attach , pin_select );       // creates life upport system 
 
   // boots sensor ports (must leave alone)
   Boot_Evironment_Sensors();                             //   boot sensors for chambers 
@@ -773,7 +790,7 @@ void setup() {
 /////////////////       RAM DEBUGGER   (ripped from arduino docs)     ///////////////////
 void display_freeram() {
   Serial.print(F("- SRAM left: "));
-  Serial.println(freeRam());              // byte amount remaining 
+  Serial.println(freeRam());                // byte amount remaining 
   //Serial.println(EEPROM.length());        // print epprom 4k max storage 
 }
 
@@ -884,7 +901,7 @@ void down(){
 
     String *s_buffer      = new String [item_count];    // allocated  memory - buffer for each string contents 
     
-    // Recover chars from string between delimiters 
+    // Recover / concatinate characters from between delimeters 
     int last_grab_location = 0 ;
     for (int i = 0 ; i< item_count; i++){                                           // for each delimiter                                                                                             
       for (int i_ = 0 ; i < DATA_len; i_++ ){                                       // search the string until next delimiter location 
