@@ -90,11 +90,16 @@ Life support(s) are environent contollers. Life support subsystems are responsib
 <summary> Core features and pin number:  ( Click to expand ) </summary>
 
 pin number: 
-  > 1. 
-  > 2. hidden b
+  > 1. Lighting
+  > 2. air/humidity exhange
+  > 3. Waste water collection pumps
+  > 4. Tank cleaning ( ozone scrubber )
+  > 5. Heating
+  > 6. Ozone gas release valve
+  > 7. Water tank level sensor 
+  > 8. Door/light override toggle button     
 
 </details>
-
 
 
 Basic example: ( environments can be assigned to any life support ! )
