@@ -104,6 +104,8 @@ pin index:
 </details>
 
 
+## Environments: 
+
 Basic example: ( environments can be assigned to any life support ! )
 
 life support (A) ---> FC_1, FC_2, FC_3
