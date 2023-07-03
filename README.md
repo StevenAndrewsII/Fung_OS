@@ -86,11 +86,12 @@ Life support(s) are environent contollers. Life support subsystems are responsib
 
 8 pins are dedicated by default to manage core functions: 
 
-> **Note** Core features and pin number:
+> **Note** Core features by pin index:
 <details>
 <summary>   ( Click to expand ) </summary>
 
-pin number: 
+pin index: 
+
   > 1. Lighting
   > 2. air/humidity exhange
   > 3. Waste water collection pumps
