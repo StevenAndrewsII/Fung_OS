@@ -103,7 +103,7 @@ pin index:
 
 </details>
 
-Each life support subsystem that is created has a large number of settings to maintain it system. These settings can be changed via serial communication via commands through the front end interface. 
+Each life support subsystem that is created has a large number of settings to maintain its function. These settings can be changed via serial communication via commands through the front end interface. 
 > **Warning** manually setting from source: see ending for headless running [ no pi needed ! ] ) 
 
 
