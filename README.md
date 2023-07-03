@@ -142,10 +142,10 @@ graph TD;
    Water/Fog_tank-->valve_4-->FC_4;
 
 
-   FC_1 --> filtered_air_out_passive;
-   FC_2 --> filtered_air_out_passive;
-   FC_3 --> filtered_air_out_passive;
-   FC_4 --> filtered_air_out_passive;
+   FC_1 --> filtered_air_out_passive_or_valved;
+   FC_2 --> filtered_air_out_passive_or_valved;
+   FC_3 --> filtered_air_out_passive_or_valved;
+   FC_4 --> filtered_air_out_passive_or_valved;
 
    
 
