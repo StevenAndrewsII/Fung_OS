@@ -90,8 +90,8 @@ Life support(s) are environent contollers. Life support subsystems are responsib
 <summary> Core features and pin number:  ( Click to expand ) </summary>
 
 pin number: 
-1. 
-2. hidden b
+  > 1. 
+  > 2. hidden b
 
 </details>
 
