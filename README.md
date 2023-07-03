@@ -146,6 +146,13 @@ graph TD;
    FC_3 --> waste_pump;
    FC_4 --> waste_pump;
 
+   FC_1 --> filtered_air_out_passive;
+   FC_2 --> filtered_air_out_passive;
+   FC_3 --> filtered_air_out_passive;
+   FC_4 --> filtered_air_out_passive;
+
+   
+
   
 ```
 
