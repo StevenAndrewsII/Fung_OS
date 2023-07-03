@@ -86,7 +86,7 @@ Life support(s) are environent contollers. Life support subsystems are responsib
 
 8 pins are dedicated by default to manage core functions: 
 
-> **Note** Core features by pin index:
+> **Note** Core features by pin index: &#x1F536;
 <details>
 <summary>   ( Click to expand ) </summary>
 
