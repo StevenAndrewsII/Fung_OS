@@ -141,10 +141,6 @@ graph TD;
    Water/Fog_tank-->valve_3-->FC_3;
    Water/Fog_tank-->valve_4-->FC_4;
 
-   FC_1 --> waste_pump;
-   FC_2 --> waste_pump;
-   FC_3 --> waste_pump;
-   FC_4 --> waste_pump;
 
    FC_1 --> filtered_air_out_passive;
    FC_2 --> filtered_air_out_passive;
