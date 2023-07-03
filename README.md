@@ -109,6 +109,7 @@ Each life support subsystem that is created has a large number of settings to ma
 
 ## Environments: 
 
+
 Basic example: ( environments can be assigned to any life support ! )
 
 life support (A) ---> FC_1, FC_2, FC_3
@@ -125,6 +126,16 @@ graph TD;
     Environment_E-->Life_support_2;
     Environment_F-->Life_support_2;
     Arduino_1-->PI_1;
+  
+```
+
+## Building a system: 
+
+flow chart:
+```mermaid
+graph TD;
+   filter_air_intake-->Water/Fog_tank-->FC;
+
   
 ```
 
