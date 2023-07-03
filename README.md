@@ -62,7 +62,9 @@ The rasbery pi frontside features:
 > 1. Multithreaded application 
 
 
-## System communication overview:
+## Multi Arduino communication
+
+The Rasbery pi ( frontside user interface ) is able to communicate and manage 4 Arduinos at a time using a simple USB connection. No additional hardware required. 
 
 Basic example:
 
@@ -78,7 +80,22 @@ graph TD;
 ```
 
 
-## Life support sub_system overview:
+## Life support:
+
+Life support(s) are environent contollers. Life support subsystems are responsible for all aspects of the environemt core functions. 
+
+8 pins are dedicated by default to manage core functions: 
+
+<details>
+<summary> Core features and pin number:  ( Click to expand ) </summary>
+
+pin number: 
+1. 
+2. hidden b
+
+</details>
+
+
 
 Basic example: ( environments can be assigned to any life support ! )
 
