@@ -143,7 +143,7 @@ graph TD;
    FC_1 --> waste_pump;
    FC_2 --> waste_pump;
    FC_3 --> waste_pump;
-   FC_3 --> waste_pump;
+   FC_4 --> waste_pump;
 
   
 ```
