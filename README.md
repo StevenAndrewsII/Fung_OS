@@ -134,8 +134,9 @@ graph TD;
 flow chart:
 ```mermaid
 graph TD;
-   filter_air_intake-->Water/Fog_tank-->valve_1 -->FC_1;
+   filter_air_intake--> Water/Fog_tank;
    Water/Fog_tank-->ozone_release_valve;
+   Water/Fog_tank-->valve_1 -->FC_1;
    Water/Fog_tank-->valve_2-->FC_2;
    Water/Fog_tank-->valve_3-->FC_3;
    Water/Fog_tank-->valve_4-->FC_4;
