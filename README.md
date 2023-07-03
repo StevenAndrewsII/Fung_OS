@@ -132,7 +132,7 @@ graph TD;
 
 ## Building a system: 
 
-flow chart: [ single life support ] 
+flow chart: [ single life support air routing ] 
 ```mermaid
 graph TD;
    filter_air_intake--> Water/Fog_tank;
