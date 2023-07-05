@@ -826,11 +826,11 @@ int freeRam() {
         protocol construction examples for up data: 
 
         single packet: ( down data only )
-        packet =  "  header : data1 : data2 .... "
+        packet =  "  header ; data1 ; data2 .... "
+        data seperator   :       =  " ; "
 
         double packet: (  up data only  )
         packet =  "  header :data1 : data2 ; header : data1 : data 2  ..... "
-
         data seperator   :       =  " : "
         packet seperator :       =  " ; "
 
