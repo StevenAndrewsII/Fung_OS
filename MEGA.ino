@@ -56,12 +56,12 @@ const int     frame_rate                   =  10;            // system functions
 unsigned long RTC_lastTime                 =  millis();      // real time keeping ( once per second )
 unsigned long FPS_lastTime                 =  millis();      // fps limited 
 // memory allowocation for system backend arrays 
-#define MAX_ENVIRONMENTS 8                                   // do not change ( limited by chip I2C adresses )
-#define MAX_LIFE_SUPPORT 2                                   // changable ( youll eventually run out of pins - stay under 3 - 4)
-#define MAX_IOPINS 8                                         // epanable in the future ( last 2 pins are reserved as sensor pins )
+#define MAX_ENVIRONMENTS                   8                 // do not change ( limited by chip I2C adresses )
+#define MAX_LIFE_SUPPORT                   2                 // changable ( youll eventually run out of pins - stay under 3 - 4)
+#define MAX_IOPINS                         8                 // epanable in the future ( last 2 pins are reserved as sensor pins )
 // validation //
 String        version                      =  "1.10.0" ;     // system software version 
-bool          validation_                  =  false;         // validation check guard - on boot 
+bool          validation_                  =  true;         // validation check guard - on boot 
 // sensor init 
 DFRobot_SHT20 sht20(&Wire, SHT20_I2C_ADDR);
 // hardware reboot 
@@ -646,29 +646,49 @@ void valve_select(bool rst_ = false){
  // updater functions //  not completed for beta: 
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  void update_air(int a, int b ){
-    settings_.air_auto_on_time          = b;
-    settings_.air_on_time               = a;
+    settings_.air_auto_on_time                            = b;
+    settings_.air_on_time                                 = a;
   };//EOF
     
   void update_pump(int a, int b ){
-    settings_.pump_auto_on_time         = b;
-    settings_.pump_on_time              = a;
+    settings_.pump_auto_on_time                           = b;
+    settings_.pump_on_time                                = a;
   };//EOF
 
-  void update_heat(int a, int b ){          
-    settings_.heat_auto_on_time         = b;
-    settings_.heat_on_time              = a;
+
+  void update_temp(int a, int b , int c ){          
+    settings_.ideal_temp                                  = a;                // in F degrees 
+    settings_.temp_offset                                 = b;                // in F degrees 
+    settings_.temp_over_regulation_deley                  = c;                // in minutes
   };//EOF
-    
-  void update_temp(int a, int b, int c) {
-    settings_.ideal_temp                = a;    
+
+  
+  void update_humidity(int a, int b , int c ){          
+    settings_.ideal_humidity                              = a;                // in %
+    settings_.humidity_offset                             = b;                // in %
+    settings_.humidity_over_regulation_deley              = c;                // in minutes
+  };//EOF
+
+
+  void update_water_cleaning(int a, int b ){          
+    settings_.water_cleaning_on_time                      = a;               
+    settings_.water_cleaning_auto_on_time                 = b;                
+  };//EOF
+
+
+  void update_lighting(int a, bool swap = false ){          
+    settings_.day_length                                  = a;     
+    if (swap == true){
+      core_.invert_lightCycle = true;
+    }          
   };//EOF
 
 
 }; // EO Class ( LIFE SUPPORT )
 
 
-
+    int water_cleaning_on_time              = 4;                 // run time 
+      int water_cleaning_auto_on_time         = 6;                 // in hours 
 
 
 
@@ -802,6 +822,31 @@ int freeRam() {
 }
 
 //////////////////////////////////////        PROTOCOL FUNCTIONS         ////////////////////////////////////////////
+/*
+        protocol construction examples for up data: 
+
+        single packet: ( down data only )
+        packet =  "  header : data1 : data2 .... "
+
+        double packet: (  up data only  )
+        packet =  "  header :data1 : data2 ; header : data1 : data 2  ..... "
+
+        data seperator   :       =  " : "
+        packet seperator :       =  " ; "
+
+        Note: down data is limited to strings 64 bytes long 
+
+       
+       request packet index / examples :
+
+       pull up all tem and humidity from all envrionments     =   "pullupall_" 
+       request version                                        =   "validate_"
+       validation check for verison request                   =   "validation;_accepted_"               // or // "validation;_declined_"
+       set life supports settings by name                     =   "qset_;air;unitname;value,value..."   { "air","lighting",etc... see code for expected values - should all be intigers }
+       get all settings of an individual life support         =   "getSet_;unitname"
+
+*/
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int ping(String id, String pack[]) {
   if (id == "ping"){
@@ -813,26 +858,26 @@ int ping(String id, String pack[]) {
 }
 
 //  [[[[           Software Validation         ]]]]
-
 // software version validation ( request )
-int validate(String id, String pack[]) { // Used to validate software with hosts
-  if (id == "validate" ){
-      // send validation response 
-      Serial.print("validation:"+version);
+int validate(String id, String pack[]) { 
+  if (id == "validate_" ){
+      Serial.print("validation:"+version);       // send validation response 
       return 1;
   }else{
-    return -2; // error code for incorrect id feild // unused 
+    return -2;
   }
 } // EOF (  validate  )
 
 // software version validation ( response )
-int validateaccept(String id, String pack[]) { // Used to validate software with hosts
-  if (id == "v_accept"){
-        // guard 
+int validate_check(String id, String pack[]) { // Used to validate software with hosts
+  if (id == "validation_"){
         if (pack[1]){
           if (pack[1] == "_accepted_"){
             Serial.println("arduino validation_accepted");
-            validation_ = true;
+            validation_           = true;
+          }
+          if (pack[1] == "_declined_"){
+            validation_           = false;
           }
         }
       return 1;
@@ -843,23 +888,111 @@ int validateaccept(String id, String pack[]) { // Used to validate software with
 
 
 //  [[[[           System data pull request         ]]]]
-int pull_updata(String id, String pack[]) {
-  if (id == "cyf" && validation_ == true ){
-      // pull up all data from core 
-      Serial.println("Function pull_updata has been called");
-      return 1;
+int pull_allup(String id, String pack[]) {
+  if (id == "pullupall_" && validation_ == true ){
+    // pull up all data from core 
+    String out_data;                     // string for out data ( 64 bit length )
+    // packet header 
+    out_data               += "up_";     // return request 
+    for (int L_i = 0 ; L_i < sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]); L_i++){
+      for (int i = 0 ; i < sizeof(LIFE_SUPPORT_BUFFER[L_i].enviroments_connected)/sizeof(LIFE_SUPPORT_BUFFER[L_i].enviroments_connected[0]); i++){
+        for (int check_ = 0 ; check_ < sizeof(ENVIRONMENT_BUFFER)/sizeof(ENVIRONMENT_BUFFER[0]); check_++){
+          if (LIFE_SUPPORT_BUFFER[L_i].enviroments_connected[i] == ENVIRONMENT_BUFFER[check_].ID ) {
+            out_data   += ":"+ENVIRONMENT_BUFFER[check_].ID +":"+ String( ENVIRONMENT_BUFFER[check_].temp_) +":"+String( ENVIRONMENT_BUFFER[check_].humidity_);
+          }
+        }
+      }
+    }
+    Serial.print(out_data);
+    return 1;
   }else{
     return -2; // error code for incorrect id feild // unused 
   }
 } // EOF (  pull_updata )
 
 
+//  [[[[           apply settings (quick set)      ]]]]
+int q_set(String id, String pack[]) {
+  if (id == "qset_" && validation_ == true ){
+    if (pack[1] && pack[2] && pack[3] && pack[4] ){
+      for (int L_i = 0 ; L_i < sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]); L_i++){
+        if (pack[2] == LIFE_SUPPORT_BUFFER[L_i].ID ){
+          if (pack[1] == "air"){
+            LIFE_SUPPORT_BUFFER[L_i].update_air(   pack[3].toInt() ,  pack[4].toInt() ); 
+          }
+
+          if (pack[1] == "pump"){
+            LIFE_SUPPORT_BUFFER[L_i].update_pump(  pack[3].toInt() ,  pack[4].toInt() ); 
+          }
+
+          if (pack[1] == "W_C"){
+            LIFE_SUPPORT_BUFFER[L_i].update_water_cleaning(  pack[3].toInt() ,  pack[4].toInt() ); 
+          }
+          
+          if (pack[1] == "lighting"){
+            LIFE_SUPPORT_BUFFER[L_i].update_water_cleaning(  pack[3].toInt() ,  pack[4].toInt() );  // 4 should be 0 or 1 
+          }
+
+          if (pack[1] == "temp" && pack[5] ){
+            LIFE_SUPPORT_BUFFER[L_i].update_temp(  pack[3].toInt() ,  pack[4].toInt() , pack[5].toInt()  ); 
+          }
+          if (pack[1] == "humidity" && pack[5] ){
+            LIFE_SUPPORT_BUFFER[L_i].update_humidity(  pack[3].toInt() ,  pack[4].toInt() , pack[5].toInt()  ); 
+          }
+        }
+      }
+    }
+          return  1;
+  }else{
+          return -2; // error code for incorrect id feild // unused 
+  }
+} // EOF (  qset )
+
+
+//  [[[[           get all settings for a given life support subsystem      ]]]]
+int get_set(String id, String pack[]) {
+  if (id == "getSet_" && validation_ == true ){
+    String out_data;
+    out_data                    = "getset_:";
+    if (pack[1]){
+      for (int LI = 0 ; LI < sizeof(LIFE_SUPPORT_BUFFER)/sizeof(LIFE_SUPPORT_BUFFER[0]); LI++){
+        if (pack[1] == LIFE_SUPPORT_BUFFER[LI].ID ){
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.air_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.air_auto_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.water_cleaning_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.water_cleaning_auto_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.pump_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.pump_auto_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.heat_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.heat_auto_on_time)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.day_length)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.ideal_temp)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.temp_offset)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.temp_over_regulation_deley)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.ideal_humidity)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.humidity_offset)+":";
+          out_data += String(LIFE_SUPPORT_BUFFER[LI].settings_.humidity_over_regulation_deley);
+          // send it 
+          Serial.print(out_data);
+        }
+      }
+    }
+          return  1;
+  }else{
+          return -2;
+  }
+} // EOF ( getSet )
+
+
+
 ///////////////////////////////////    Plugin function indexing ( add in for new protocol functions )   ///////////////////////////////////////
 int (*protocol[])(String id, String pack[]) = {
   ping,
   validate,
-  validateaccept,
-  pull_updata,
+  validate_check,
+  pull_allup,
+  q_set,
+  get_set,
 };
 
 
@@ -919,7 +1052,7 @@ void down(){
     // package s_buffer for exicution 
     for (int plugins_index = 0 ; plugins_index < sizeof(protocol)/sizeof(protocol[0]); plugins_index++){
       int rt_ = (*protocol[plugins_index])(s_buffer[0],s_buffer);
-      if (rt_ == 1){ // early escapment - speed up linear search 
+      if (rt_ == 1){ 
         break;
       }
     }
