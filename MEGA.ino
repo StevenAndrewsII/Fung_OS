@@ -61,7 +61,7 @@ unsigned long FPS_lastTime                 =  millis();      // fps limited
 #define MAX_IOPINS                         8                 // epanable in the future ( last 2 pins are reserved as sensor pins )
 // validation //
 String        version                      =  "1.10.0" ;     // system software version 
-bool          validation_                  =  true;         // validation check guard - on boot 
+bool          validation_                  =  false;         // validation check guard - on boot 
 // sensor init 
 DFRobot_SHT20 sht20(&Wire, SHT20_I2C_ADDR);
 // hardware reboot 
