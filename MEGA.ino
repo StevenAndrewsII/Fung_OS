@@ -54,12 +54,12 @@ Creation date:        6/30/23               ( BETA 1.10.0 )
 const int     interval                     =  1000;          // 1 second in mills 
 const int     frame_rate                   =  10;            // system functions 
 // system clock init 
-unsigned long RTC_lastTime                 =  millis();      // real time keeping ( once per second )
+unsigned long RTC_lastTime                 =  millis();      // time keeping ( once per second )
 unsigned long FPS_lastTime                 =  millis();      // fps limited 
 // memory allowocation for system backend arrays 
 #define MAX_ENVIRONMENTS                   8                 // do not change ( limited by chip I2C adresses )
 #define MAX_LIFE_SUPPORT                   2                 // changable ( youll eventually run out of pins - stay under 3 - 4)
-#define MAX_IOPINS                         8                 // epanable in the future ( last 2 pins are reserved as sensor pins )
+#define MAX_IOPINS                         8                 // expanable in the future ( last 2 pins are reserved as sensor pins )
 // validation //
 String        version                      =  "1.10.0" ;     // system software version 
 bool          validation_                  =  false;         // validation check guard - on boot 
@@ -90,13 +90,10 @@ SYS_SETTINGS                    SYS_SETTINGS_;                // hard system set
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*                                                 Life support class 
-
-DEFINITION:   
-Environments relates to how many fruiting chambers / tents are fed by a life support system. 
-
+definintion: local FCs, tents, or rooms 
 Examples: system flow chart 
 
-life support (A) ---> FC_1, FC_2, FC_3
+life support (A) ---> FC_1, FC_2, FC_3 = environments 
 
 life support (B) ---> FC_4, FC_5
 
@@ -215,13 +212,13 @@ class LIFE_SUPPORT  {
       bool averge_system = "true";
 
       // clock setting 
-      int air_on_time                         = 6;                 // run time 
+      int air_on_time                         = 6;                 // run time / in min 
       int air_auto_on_time                    = 4;                 // in hours 
 
-      int water_cleaning_on_time              = 4;                 // run time 
+      int water_cleaning_on_time              = 4;                 // run time / in min 
       int water_cleaning_auto_on_time         = 6;                 // in hours 
 
-      int pump_on_time                        = 6;                 // run time 
+      int pump_on_time                        = 6;                 // run time / in min 
       int pump_auto_on_time                   = 4;                 // in days 
 
       int heat_on_time                        = 0  ;               // not active by default 
@@ -236,8 +233,8 @@ class LIFE_SUPPORT  {
 
       // humidity control 
       int ideal_humidity                      = 90;                // humidity target 
-      int humidity_offset                     = 3;                 //
-      int humidity_over_regulation_deley      = 1;                 // in minutes 
+      int humidity_offset                     = 3;                 // variation to initiate delay for start up 
+      int humidity_over_regulation_deley      = 1;                 // in minutes ( deley start due to temo flux ) 
 
   };
   settings                      settings_;
